@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stockea · Progreso del Proyecto</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F9FBFC;
+    --navy: #0B033C;
+    --coral: #FF6652;
+    --sky: #C7E3EE;
+    --blush: #F0D1CD;
+    --gray-100: #F1F4F6;
+    --gray-200: #E3E8EC;
+    --gray-400: #97A0A8;
+    --gray-600: #5B6470;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .hero {
+    background: linear-gradient(180deg, var(--bg) 0%, #F2F6F9 100%);
+    padding: 60px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--blush) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--sky) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+  .logo {
+    font-size: 48px; font-weight: 800;
+    letter-spacing: 12px; color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .tagline { font-size: 16px; color: var(--gray-600); margin-bottom: 24px; }
+  .version-badge {
+    display: inline-block;
+    background: var(--coral);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 32px;
+  }
+  .overall {
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    margin: 0 auto;
+    max-width: 720px;
+    box-shadow: 0 4px 24px rgba(11, 3, 60, 0.06);
+    position: relative; z-index: 1;
+    text-align: left;
+  }
+  .overall-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .overall-percent {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .overall-percent span { font-size: 24px; color: var(--gray-400); }
+  .progress-track {
+    background: var(--gray-100);
+    height: 12px;
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--coral), #FF8F7F);
+    border-radius: 100px;
+    transition: width 0.6s ease;
+  }
+  .overall-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--gray-600);
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 60px 24px 80px; }
+  .section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .section-subtitle { font-size: 14px; color: var(--gray-600); margin-bottom: 28px; }
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .phase {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(11, 3, 60, 0.04);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .phase:hover {
+    box-shadow: 0 8px 24px rgba(11, 3, 60, 0.08);
+    transform: translateY(-2px);
+  }
+  .phase.done { border-color: var(--sky); }
+  .phase.active { border-color: var(--coral); }
+  .phase.pending { border-color: var(--gray-200); }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .phase-number {
+    font-size: 12px; font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .phase-status {
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .phase-status.done { background: var(--sky); color: var(--navy); }
+  .phase-status.active { background: var(--coral); color: white; }
+  .phase-status.pending { background: var(--gray-100); color: var(--gray-600); }
+  .phase-name { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+  .phase-desc { font-size: 13px; color: var(--gray-600); margin-bottom: 16px; line-height: 1.5; }
+  .phase-progress-bar {
+    height: 6px;
+    background: var(--gray-100);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .phase-progress-bar .fill {
+    height: 100%;
+    background: var(--coral);
+    border-radius: 100px;
+    transition: width 0.6s ease;
+  }
+  .phase.done .phase-progress-bar .fill { background: var(--sky); }
+  .phase-progress-text {
+    text-align: right;
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .changelog {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(11, 3, 60, 0.04);
+  }
+  .log-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-date {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--coral);
+    min-width: 110px;
+  }
+  .log-content h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .log-content p { font-size: 13px; color: var(--gray-600); }
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--gray-400);
+    font-size: 13px;
+    border-top: 1px solid var(--gray-100);
+  }
+  footer a { color: var(--coral); text-decoration: none; font-weight: 600; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 640px) {
+    .logo { font-size: 36px; letter-spacing: 8px; }
+    .overall-percent { font-size: 48px; }
+    .overall { padding: 24px; }
+    .log-item { flex-direction: column; gap: 4px; }
+    .log-date { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-content">
+    <div class="logo">STOCKEA</div>
+    <p class="tagline">Descubrí. Guardá. Comprá.</p>
+    <div class="version-badge" id="versionBadge">v0.1.0 · En construcción</div>
+    <div class="overall">
+      <div class="overall-label">Progreso general del proyecto</div>
+      <div class="overall-percent" id="overallPercent">0<span>%</span></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="overallBar" style="width: 0%"></div>
+      </div>
+      <div class="overall-meta">
+        <span id="phaseCount">0 fases completadas</span>
+        <span id="lastUpdate">—</span>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="container">
+  <section>
+    <h2 class="section-title">🗺️ Hoja de ruta</h2>
+    <p class="section-subtitle">Estado actual de cada fase del desarrollo.</p>
+    <div class="phases" id="phasesGrid"></div>
+  </section>
+  <br><br>
+  <section>
+    <h2 class="section-title">📝 Últimos avances</h2>
+    <p class="section-subtitle">Registro cronológico de lo que se fue construyendo.</p>
+    <div class="changelog" id="changelog"></div>
+  </section>
+</main>
+<footer>
+  <p><strong>Stockea</strong> · Proyecto en desarrollo activo</p>
+  <p style="margin-top: 8px;">Última actualización: <span id="footerDate">—</span></p>
+  <p style="margin-top: 16px;">
+    <a href="https://github.com/juanhvm2/stockea" target="_blank">Ver repositorio en GitHub →</a>
+  </p>
+</footer>
+<script>
+const PROJECT = {
+  version: '0.1.0',
+  lastUpdate: '2026-10-16',
+  phases: [
+    { n: 1,  name: 'Configuración inicial',       desc: 'Proyecto Flutter, Git, GitHub y entorno listo.', status: 'done',    progress: 100 },
+    { n: 2,  name: 'Conexión con Supabase',       desc: 'Backend, base de datos, tablas SQL y conexión.', status: 'active',  progress: 0   },
+    { n: 3,  name: 'Autenticación',               desc: 'Login, registro y recuperación de contraseña.',  status: 'pending', progress: 0   },
+    { n: 4,  name: 'Navegación y estructura',     desc: 'Barra inferior con 5 pestañas y menú lateral.',  status: 'pending', progress: 0   },
+    { n: 5,  name: 'Pantalla de Inicio (Home)',   desc: 'Feed visual tipo Pinterest con categorías.',     status: 'pending', progress: 0   },
+    { n: 6,  name: 'Pantalla Mercado (Shop)',     desc: 'Productos, carrito, pagos y Mercado Pago.',      status: 'pending', progress: 0   },
+    { n: 7,  name: 'Pantalla Crear',              desc: 'Subir fotos, editar y etiquetar productos.',     status: 'pending', progress: 0   },
+    { n: 8,  name: 'Pantalla Mensajes',           desc: 'Notificaciones y chat privado.',                 status: 'pending', progress: 0   },
+    { n: 9,  name: 'Pantalla Perfil',             desc: 'Perfil, colecciones, billetera y ajustes.',      status: 'pending', progress: 0   },
+    { n: 10, name: 'Funciones avanzadas',         desc: 'Live Shopping, publicidad y push notifications.',status: 'pending', progress: 0   },
+    { n: 11, name: 'Publicación final',           desc: 'Testing, optimización y lanzamiento a tiendas.', status: 'pending', progress: 0   }
+  ],
+  changelog: [
+    { date: '16 Oct 2026', title: 'Fase 1 completada ✅',  desc: 'Proyecto Flutter creado, Git y GitHub configurados, paleta oficial definida y pantalla splash con el nombre STOCKEA.' },
+    { date: '15 Oct 2026', title: 'Inicio del proyecto',    desc: 'Definición de la idea, stack técnico (Flutter + Supabase) y hoja de ruta de 11 fases.' }
+  ]
+};
+function render() {
+  const totalProgress = PROJECT.phases.reduce((sum, p) => sum + p.progress, 0) / PROJECT.phases.length;
+  const doneCount = PROJECT.phases.filter(p => p.status === 'done').length;
+  document.getElementById('versionBadge').textContent = 'v' + PROJECT.version + ' · En construcción';
+  document.getElementById('overallPercent').innerHTML = Math.round(totalProgress) + '<span>%</span>';
+  document.getElementById('overallBar').style.width = totalProgress + '%';
+  document.getElementById('phaseCount').textContent = doneCount + ' de ' + PROJECT.phases.length + ' fases completadas';
+  document.getElementById('lastUpdate').textContent = 'Actualizado: ' + PROJECT.lastUpdate;
+  document.getElementById('footerDate').textContent = PROJECT.lastUpdate;
+  const grid = document.getElementById('phasesGrid');
+  grid.innerHTML = PROJECT.phases.map(p => {
+    const statusText = p.status === 'done' ? 'Completada' : p.status === 'active' ? 'En curso' : 'Pendiente';
+    return '<div class="phase ' + p.status + '">' +
+      '<div class="phase-header">' +
+      '<span class="phase-number">Fase ' + p.n + '</span>' +
+      '<span class="phase-status ' + p.status + '">' + statusText + '</span>' +
+      '</div>' +
+      '<div class="phase-name">' + p.name + '</div>' +
+      '<div class="phase-desc">' + p.desc + '</div>' +
+      '<div class="phase-progress-bar"><div class="fill" style="width: ' + p.progress + '%"></div></div>' +
+      '<div class="phase-progress-text">' + p.progress + '%</div>' +
+      '</div>';
+  }).join('');
+  const log = document.getElementById('changelog');
+  log.innerHTML = PROJECT.changelog.map(item =>
+    '<div class="log-item">' +
+    '<div class="log-date">' + item.date + '</div>' +
+    '<div class="log-content">' +
+    '<h4>' + item.title + '</h4>' +
+    '<p>' + item.desc + '</p>' +
+    '</div></div>'
+  ).join('');
+}
+render();
+</script>
+</body>
+</html>
